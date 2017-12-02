@@ -2,10 +2,18 @@
 
 import time
 import json
-import win32api
+import argparse
 from bs4 import BeautifulSoup
 import urllib3
 import certifi
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-t', dest='test', action='store_true', default=False)
+parser.add_argument('-w', dest='winlocal', action='store_true', default=False)
+args = parser.parse_args()
+
+if args.winlocal:
+    import win32api
 
 class CourseScraper:
     URL_ROOT = 'https://courses.illinois.edu/schedule'
@@ -34,7 +42,8 @@ class CourseScraper:
     def send_alert(self, crn, avail):
         alert = self.name + ' (' + str(crn) + ') is ' + avail
         print(alert)
-        win32api.MessageBox(0, alert, "Reggie", 0x00001030)
+        if args.winlocal:
+            win32api.MessageBox(0, alert, "Reggie", 0x00001030)
 
     @staticmethod
     def send_error(e):
@@ -75,8 +84,10 @@ class CourseScraper:
         return statuses
 
 if __name__ == '__main__':
-    # cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005, 65089])
-    cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005])
+    if args.test:
+        cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005, 65089])
+    else:
+        cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005])
     atms120 = CourseScraper(2018, 'spring', 'ATMS', 120, [39412])
     anth103 = CourseScraper(2018, 'spring', 'ANTH', 103, [54206])
     CourseScraper.loop([cs374, atms120, anth103])
