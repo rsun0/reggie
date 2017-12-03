@@ -10,14 +10,21 @@ import certifi
 parser = argparse.ArgumentParser()
 parser.add_argument('-t', dest='test', action='store_true', default=False)
 parser.add_argument('-w', dest='winlocal', action='store_true', default=False)
+parser.add_argument('-l', dest='linlocal', action='store_true', default=False)
 args = parser.parse_args()
 
 if args.winlocal:
     import win32api
+if args.linlocal:
+    import tkinter as tk
+    from tkinter import messagebox
 
 class CourseScraper:
     URL_ROOT = 'https://courses.illinois.edu/schedule'
     HTTP = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
+    if args.linlocal:
+        ALERT_ROOT = tk.Tk()
+        ALERT_ROOT.withdraw()
 
     @staticmethod
     def loop(scrapers):
@@ -43,7 +50,9 @@ class CourseScraper:
         alert = self.name + ' (' + str(crn) + ') is ' + avail
         print(alert)
         if args.winlocal:
-            win32api.MessageBox(0, alert, "Reggie", 0x00001030)
+            win32api.MessageBox(0, alert, 'Reggie', 0x00001030)
+        if args.linlocal:
+            messagebox.showwarning('Reggie', alert)
 
     @staticmethod
     def send_error(e):
