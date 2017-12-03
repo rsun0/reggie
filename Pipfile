@@ -1,0 +1,12 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[packages]
+beautifulsoup4 = "*"
+urllib3 = "*"
+certifi = "*"
+twilio = "*"
+
+[requires]
+python_version = "3.5"
