@@ -11,6 +11,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-t', dest='test', action='store_true', default=False)
 parser.add_argument('-w', dest='winlocal', action='store_true', default=False)
 parser.add_argument('-l', dest='linlocal', action='store_true', default=False)
+parser.add_argument('-s', dest='sms', action='store_true', default=False)
 args = parser.parse_args()
 
 if args.winlocal:
@@ -18,6 +19,8 @@ if args.winlocal:
 if args.linlocal:
     import tkinter as tk
     from tkinter import messagebox
+if args.sms:
+    from twilio.rest import Client
 
 class CourseScraper:
     URL_ROOT = 'https://courses.illinois.edu/schedule'
@@ -25,6 +28,8 @@ class CourseScraper:
     if args.linlocal:
         ALERT_ROOT = tk.Tk()
         ALERT_ROOT.withdraw()
+    if args.sms:
+        TWILIO_CLIENT = Client('AC494daf76b092345792ef2a93a4414f2c', '6cd7dfd1c98cbe02c77b1a5cce8f5cb0')
 
     @staticmethod
     def loop(scrapers):
@@ -53,10 +58,14 @@ class CourseScraper:
             win32api.MessageBox(0, alert, 'Reggie', 0x00001030)
         if args.linlocal:
             messagebox.showwarning('Reggie', alert)
+        if args.sms:
+            self.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_='+12242316794', body=alert)
 
     @staticmethod
     def send_error(e):
         print(str(e))
+        if args.sms:
+            self.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_='+12242316794', body=str(e))
 
     def check_avail(self):
         page = self.retrieve_page()
