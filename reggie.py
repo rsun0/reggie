@@ -43,9 +43,11 @@ class CourseScraper:
             for s in scrapers:
                 try:
                     s.check_avail()
-                    successes += 1
+                    if args.brief:
+                        successes += 1
                 except Exception as e:
-                    fails += 1
+                    if args.brief:
+                        fails += 1
                     try:
                         CourseScraper.send_error(e)
                     except Exception:
