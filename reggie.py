@@ -52,7 +52,7 @@ class CourseScraper:
                         pass
             if not args.brief:
                 print('Done.')
-            elif (successes + fails) % (24 * 60):
+            elif (successes + fails) % (24 * 60) == 0:
                 print('Successes: ' + str(successes))
                 print('Fails: ' + str(fails))
             time.sleep(60)
