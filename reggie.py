@@ -53,8 +53,8 @@ class CourseScraper:
             if not args.brief:
                 print('Done.')
             elif (successes + fails) % (24 * 60):
-                print('Successes: ' + successes)
-                print('Fails: ' + fails)
+                print('Successes: ' + str(successes))
+                print('Fails: ' + str(fails))
             time.sleep(60)
 
     def __init__(self, year, season, major, num, crns=[]):
