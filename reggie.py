@@ -12,6 +12,7 @@ parser.add_argument('-t', dest='test', action='store_true', default=False)
 parser.add_argument('-w', dest='winlocal', action='store_true', default=False)
 parser.add_argument('-l', dest='linlocal', action='store_true', default=False)
 parser.add_argument('-s', dest='sms', action='store_true', default=False)
+parser.add_argument('-b', dest='brief', action='store_true', default=False)
 args = parser.parse_args()
 
 if args.winlocal:
@@ -33,17 +34,27 @@ class CourseScraper:
 
     @staticmethod
     def loop(scrapers):
+        if args.brief:
+            successes = 0
+            fails = 0
         while True:
-            print('Checking...')
+            if not args.brief:
+                print('Checking...')
             for s in scrapers:
                 try:
                     s.check_avail()
+                    successes += 1
                 except Exception as e:
+                    fails += 1
                     try:
                         CourseScraper.send_error(e)
                     except Exception:
                         pass
-            print('Done.')
+            if not args.brief:
+                print('Done.')
+            elif (successes + fails) % (24 * 60):
+                print('Successes: ' + successes)
+                print('Fails: ' + fails)
             time.sleep(60)
 
     def __init__(self, year, season, major, num, crns=[]):
