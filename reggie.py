@@ -71,7 +71,7 @@ class CourseScraper:
         page = self.retrieve_page()
         data = self.process_page(page)
         for crn, avail in data.items():
-            if crn in self.crns and avail != 'Closed':
+            if crn in self.crns and avail != 'Closed' and avail != 'UNKNOWN':
                 self.send_alert(crn, avail)
 
     def retrieve_page(self):
