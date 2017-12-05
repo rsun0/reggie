@@ -31,6 +31,7 @@ class CourseScraper:
         ALERT_ROOT.withdraw()
     if args.sms:
         TWILIO_CLIENT = Client('AC494daf76b092345792ef2a93a4414f2c', '6cd7dfd1c98cbe02c77b1a5cce8f5cb0')
+    loop_iteration = 0
 
     @staticmethod
     def loop(scrapers):
@@ -38,8 +39,9 @@ class CourseScraper:
             successes = 0
             fails = 0
         while True:
+            CourseScraper.loop_iteration += 1
             if not args.brief:
-                print('Checking...')
+                print('Checking #' + str(CourseScraper.loop_iteration) + '...')
             for s in scrapers:
                 try:
                     s.check_avail()
@@ -54,7 +56,8 @@ class CourseScraper:
                         pass
             if not args.brief:
                 print('Done.')
-            elif (successes + fails) % (24 * 60) == 0:
+            elif (CourseScraper.loop_iteration) % (24 * 60) == 0:
+                print("Iterations: " + str(CourseScraper.loop_iteration))
                 print('Successes: ' + str(successes))
                 print('Fails: ' + str(fails))
             time.sleep(60)
@@ -62,9 +65,10 @@ class CourseScraper:
     def __init__(self, year, season, major, num, crns=[]):
         self.url = '/'.join([self.URL_ROOT, str(year), str(season), str(major), str(num)])
         self.name = str(major) + ' ' + str(num)
-        self.crns = crns
+        self.crns = {c:0 for c in crns}
 
     def send_alert(self, crn, avail):
+        self.crns[crn] = CourseScraper.loop_iteration
         alert = self.name + ' (' + str(crn) + ') is ' + avail
         print(alert)
         if args.winlocal:
@@ -80,11 +84,16 @@ class CourseScraper:
         if args.sms:
             self.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_='+12242316794', body=str(e))
 
+    def is_avail(self, crn, avail):
+        if crn in self.crns and avail != 'Closed' and avail != 'UNKNOWN':
+            return self.crns[crn] == 0 or self.crns[crn] <= CourseScraper.loop_iteration - 10
+        return False
+
     def check_avail(self):
         page = self.retrieve_page()
         data = self.process_page(page)
         for crn, avail in data.items():
-            if crn in self.crns and avail != 'Closed' and avail != 'UNKNOWN':
+            if self.is_avail(crn, avail):
                 self.send_alert(crn, avail)
 
     def retrieve_page(self):
