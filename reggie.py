@@ -129,5 +129,5 @@ if __name__ == '__main__':
     else:
         cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005])
     # atms120 = CourseScraper(2018, 'spring', 'ATMS', 120, [39412])
-    anth103 = CourseScraper(2018, 'spring', 'ANTH', 103, [54206])
-    CourseScraper.loop([cs374, anth103])
+    # anth103 = CourseScraper(2018, 'spring', 'ANTH', 103, [54206])
+    CourseScraper.loop([cs374])
