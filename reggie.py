@@ -56,7 +56,7 @@ class CourseScraper:
                         pass
             if not args.brief:
                 print('Done.')
-            elif (CourseScraper.loop_iteration) % (24 * 60) == 0:
+            elif (CourseScraper.loop_iteration) % (12 * 60) == 0:
                 print("Iterations: " + str(CourseScraper.loop_iteration))
                 print('Successes: ' + str(successes))
                 print('Fails: ' + str(fails))
