@@ -1,1 +1,1 @@
-worker: python reggie.py -sbt
+worker: python reggie.py -sb
