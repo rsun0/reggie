@@ -31,6 +31,7 @@ class CourseScraper:
         ALERT_ROOT.withdraw()
     if args.sms:
         TWILIO_CLIENT = Client('AC494daf76b092345792ef2a93a4414f2c', '6cd7dfd1c98cbe02c77b1a5cce8f5cb0')
+        FROM = '+12244073342'
     loop_iteration = 0
 
     @staticmethod
@@ -76,14 +77,14 @@ class CourseScraper:
         if args.linlocal:
             messagebox.showwarning('Reggie', alert)
         if args.sms:
-            self.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_='+12242316794', body=alert)
+            self.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_=CourseScraper.FROM, body=alert)
             # self.TWILIO_CLIENT.api.account.messages.create(to='+19135446871', from_='+12242316794', body=alert)
 
     @staticmethod
     def send_error(e):
         print(e)
         if args.sms:
-            CourseScraper.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_='+12242316794', body=str(e))
+            CourseScraper.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_=CourseScraper.FROM, body=str(e))
 
     def is_avail(self, crn, avail):
         if crn in self.crns and avail != 'Closed' and avail != 'UNKNOWN':
