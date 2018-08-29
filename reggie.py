@@ -51,7 +51,7 @@ class CourseScraper:
                     if args.brief:
                         fails += 1
                     try:
-                        CourseScraper.send_error(self.TWILIO_CLIENT, e)
+                        CourseScraper.send_error(e)
                     except Exception:
                         pass
             if not args.brief:
@@ -80,10 +80,10 @@ class CourseScraper:
             # self.TWILIO_CLIENT.api.account.messages.create(to='+19135446871', from_='+12242316794', body=alert)
 
     @staticmethod
-    def send_error(client, e):
-        print(str(e))
+    def send_error(e):
+        print(e)
         if args.sms:
-            client.api.account.messages.create(to='+16304482388', from_='+12242316794', body=str(e))
+            CourseScraper.TWILIO_CLIENT.api.account.messages.create(to='+16304482388', from_='+12242316794', body=str(e))
 
     def is_avail(self, crn, avail):
         if crn in self.crns and avail != 'Closed' and avail != 'UNKNOWN':
@@ -127,7 +127,7 @@ class CourseScraper:
 if __name__ == '__main__':
     if args.test:
         # cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005, 65089])
-        engl = CourseScraper(2018, 'fall', 'ENGL', 251, [20995])
+        engl = CourseScraper(2018, 'fall', 'ENGL', 251, [40995])
     else:
         # cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005])
         # atms120 = CourseScraper(2018, 'spring', 'ATMS', 120, [39412])
