@@ -126,9 +126,11 @@ class CourseScraper:
 
 if __name__ == '__main__':
     if args.test:
-        cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005, 65089])
+        # cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005, 65089])
+        engl = CourseScraper(2018, 'fall', 'ENGL', 251, [20995])
     else:
-        cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005])
-    # atms120 = CourseScraper(2018, 'spring', 'ATMS', 120, [39412])
-    # anth103 = CourseScraper(2018, 'spring', 'ANTH', 103, [54206])
-    CourseScraper.loop([cs374])
+        # cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005])
+        # atms120 = CourseScraper(2018, 'spring', 'ATMS', 120, [39412])
+        # anth103 = CourseScraper(2018, 'spring', 'ANTH', 103, [54206])
+        engl = CourseScraper(2018, 'fall', 'ENGL', 266, [61869, 61905])
+    CourseScraper.loop([engl])
