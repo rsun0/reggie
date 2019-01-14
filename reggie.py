@@ -108,7 +108,7 @@ class CourseScraper:
 
     def process_page(self, data):
         soup = BeautifulSoup(data, 'lxml')
-        js = soup.find(type='text/javascript')
+        js = soup.find_all(type='text/javascript')[1]
         fields = self.parse_js(js.string)
         statuses = self.extract_status(fields)
         return statuses
@@ -128,10 +128,14 @@ class CourseScraper:
 if __name__ == '__main__':
     if args.test:
         # cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005, 65089])
-        engl = CourseScraper(2018, 'fall', 'ENGL', 251, [40995])
+        # engl = CourseScraper(2018, 'fall', 'ENGL', 251, [40995])
+        # phil = CourseScraper(2019, 'spring', 'PHIL', 101, [35404])
+        sec = CourseScraper(2019, 'spring', 'CS', 460, [50112])
     else:
         # cs374 = CourseScraper(2018, 'spring', 'CS', 374, [65088, 67005])
         # atms120 = CourseScraper(2018, 'spring', 'ATMS', 120, [39412])
         # anth103 = CourseScraper(2018, 'spring', 'ANTH', 103, [54206])
-        engl = CourseScraper(2018, 'fall', 'ENGL', 266, [61869, 61905])
-    CourseScraper.loop([engl])
+        # engl = CourseScraper(2018, 'fall', 'ENGL', 266, [61869, 61905])
+        # phil = CourseScraper(2019, 'spring', 'PHIL', 101, [43843, 35430])
+        sec = CourseScraper(2019, 'spring', 'CS', 460, [50113])
+    CourseScraper.loop([sec])

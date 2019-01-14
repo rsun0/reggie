@@ -1,1 +1,1 @@
-worker: python 2.2.1.3.py
+worker: python reggie.py -st
